@@ -27,6 +27,8 @@ func Git(gitinstance string) func(w http.ResponseWriter, r *http.Request) {
 			FullPackage: r.URL.Path[1:],
 		}
 
+		panic("f")
+
 		var buf bytes.Buffer
 		if err := gitTemplate.Execute(&buf, data); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)

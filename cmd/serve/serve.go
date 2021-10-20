@@ -3,9 +3,11 @@ package serve
 import (
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/StiviiK/go-modules-http-proxy/cmd"
 	"github.com/StiviiK/go-modules-http-proxy/pkg/html"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/urfave/cli/v2"
 )
@@ -38,7 +40,7 @@ func init() {
 			httpRouter.HandleFunc("/", html.Doge())
 			httpRouter.PathPrefix("/{[a-zA-Z0-9=-/]+}").HandlerFunc(html.Git("https://github.com/uber-go"))
 
-			return http.ListenAndServe(fmt.Sprintf("%s:%d", address, port), httpRouter)
+			return http.ListenAndServe(fmt.Sprintf("%s:%d", address, port), handlers.CombinedLoggingHandler(os.Stdout, httpRouter))
 		},
 	}
 
