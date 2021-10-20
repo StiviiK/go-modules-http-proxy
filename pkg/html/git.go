@@ -1,6 +1,7 @@
 package html
 
 import (
+	"bytes"
 	"net/http"
 	"strings"
 	"text/template"
@@ -9,7 +10,6 @@ import (
 type GitTemplateData struct {
 	Hostname    string
 	GitInstance string
-	Namespace   string
 	BasePackage string
 	FullPackage string
 }
@@ -18,18 +18,22 @@ var (
 	gitTemplate *template.Template
 )
 
-func Git(hostname string, gitinstance string, namespace string) func(w http.ResponseWriter, r *http.Request) {
+func Git(gitinstance string) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		data := GitTemplateData{
-			Hostname:    hostname,
+			Hostname:    r.Host,
 			GitInstance: gitinstance,
-			Namespace:   namespace,
 			BasePackage: strings.Split(r.URL.Path, "/")[1],
 			FullPackage: r.URL.Path[1:],
 		}
 
-		if err := gitTemplate.Execute(w, data); err != nil {
+		var buf bytes.Buffer
+		if err := gitTemplate.Execute(&buf, data); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
+
+		// Only write the response on success
+		w.Write(buf.Bytes())
 	}
 }

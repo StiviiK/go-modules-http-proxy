@@ -11,7 +11,6 @@ import (
 )
 
 var (
-	host    string
 	address string
 	port    int
 )
@@ -20,11 +19,6 @@ func init() {
 	command := &cli.Command{
 		Name: "serve",
 		Flags: []cli.Flag{
-			&cli.StringFlag{
-				Name:        "host",
-				Usage:       "Hostname of the proxy",
-				Destination: &host,
-			},
 			&cli.StringFlag{
 				Name:        "address",
 				Value:       "0.0.0.0",
@@ -41,7 +35,8 @@ func init() {
 		},
 		Action: func(c *cli.Context) error {
 			httpRouter := mux.NewRouter()
-			httpRouter.PathPrefix("/").HandlerFunc(html.Git(host, "https://github.com", "stiviik"))
+			httpRouter.HandleFunc("/", html.Doge())
+			httpRouter.PathPrefix("/{[a-zA-Z0-9=-/]+}").HandlerFunc(html.Git("https://github.com/uber-go"))
 
 			return http.ListenAndServe(fmt.Sprintf("%s:%d", address, port), httpRouter)
 		},
