@@ -26,4 +26,5 @@ FROM gcr.io/distroless/base
 # Copy our static executable.
 COPY --from=builder /usr/local/bin/go-modules-http-proxy /usr/local/bin/modulesproxy
 
-CMD ["/usr/local/bin/modulesproxy", "serve"]
+EXPOSE 8080
+CMD ["/usr/local/bin/modulesproxy", "serve", "--address=0.0.0.0", "--port=8080"]

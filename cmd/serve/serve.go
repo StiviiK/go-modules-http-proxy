@@ -11,24 +11,25 @@ import (
 )
 
 var (
-	host       string
-	port       int
-	httpRouter *mux.Router
+	host    string
+	address string
+	port    int
 )
 
 func init() {
-	httpRouter = mux.NewRouter()
-	httpRouter.PathPrefix("/").HandlerFunc(html.GitHubHandler)
-
 	command := &cli.Command{
 		Name: "serve",
 		Flags: []cli.Flag{
 			&cli.StringFlag{
-				Name:        "address",
-				Aliases:     []string{"host"},
-				Value:       "0.0.0.0",
-				Usage:       "Host to listen on",
+				Name:        "host",
+				Usage:       "Hostname of the proxy",
 				Destination: &host,
+			},
+			&cli.StringFlag{
+				Name:        "address",
+				Value:       "0.0.0.0",
+				Usage:       "Address to listen on",
+				Destination: &address,
 			},
 			&cli.IntFlag{
 				Name:        "port",
@@ -39,8 +40,10 @@ func init() {
 			},
 		},
 		Action: func(c *cli.Context) error {
-			fmt.Printf("Listening on %s:%d\n", host, port)
-			return http.ListenAndServe(fmt.Sprintf("%s:%d", host, port), httpRouter)
+			httpRouter := mux.NewRouter()
+			httpRouter.PathPrefix("/").HandlerFunc(html.Git(host, "https://github.com", "stiviik"))
+
+			return http.ListenAndServe(fmt.Sprintf("%s:%d", address, port), httpRouter)
 		},
 	}
 

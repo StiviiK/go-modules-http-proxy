@@ -24,12 +24,14 @@ var Version = "N/A"
 // the time of build
 var BuildTime = "N/A"
 
+// assets is a map of embedded assets
 //go:embed assets/*
 var assets embed.FS
 
 func init() {
 	config.Set("Go Modules HTTP Proxy", Version, BuildTime)
 
+	// Parse the HTML assets
 	html.ParseTemplates(assets)
 }
 
