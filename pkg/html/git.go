@@ -19,14 +19,14 @@ var (
 	gitTemplate *template.Template
 )
 
-func Git(gitinstance string) func(w http.ResponseWriter, r *http.Request) {
+func Git(gitinstance, branch string) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		data := GitTemplateData{
 			Hostname:    r.Host,
 			GitInstance: gitinstance,
 			BasePackage: strings.Split(r.URL.Path, "/")[1],
 			FullPackage: r.URL.Path[1:],
-			Branch:      "main",
+			Branch:      branch,
 		}
 
 		var buf bytes.Buffer

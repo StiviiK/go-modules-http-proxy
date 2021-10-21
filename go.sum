@@ -18,5 +18,7 @@ github.com/urfave/cli/v2 v2.3.0 h1:qph92Y649prgesehzOrQjdWyxFOp/QVM+6imKHad91M=
 github.com/urfave/cli/v2 v2.3.0/go.mod h1:LJmUH05zAU44vOAcrfzZQKsZbVcdbOG8rtL3/XcUArI=
 go3.stivik.me/modulesproxy-test v0.0.0-20211021140855-fab8de467ca9 h1:M9Sc/g9WpUseu/ZF1/+GxILCRjkphHHhjL8YhaU9msQ=
 go3.stivik.me/modulesproxy-test v0.0.0-20211021140855-fab8de467ca9/go.mod h1:F35c6Are2w3WTATuo7v6mUcfFtNzSxRkV1fFQDRvAzE=
+go4.stivik.me/modulesproxy-test v0.0.0-20211021145452-b7d7d5c9ca38 h1:6gX0Jbs1MlpTjnExAGO+bLo+BRSTXcxbpq9cA4WTXF0=
+go4.stivik.me/modulesproxy-test v0.0.0-20211021145452-b7d7d5c9ca38/go.mod h1:sak/QQTxm33vbZkhS2PcLWEwf+KdA6OZdt2noTFPm1U=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/yaml.v2 v2.2.3/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=
