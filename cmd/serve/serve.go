@@ -38,7 +38,7 @@ func init() {
 		Action: func(c *cli.Context) error {
 			httpRouter := mux.NewRouter()
 			httpRouter.HandleFunc("/", html.Doge())
-			httpRouter.PathPrefix("/{[a-zA-Z0-9=-/]+}").HandlerFunc(html.Git("https://github.com/uber-go"))
+			httpRouter.PathPrefix("/{[a-zA-Z0-9=-/]+}").HandlerFunc(html.Git("https://github.com/StiviiK"))
 
 			return http.ListenAndServe(fmt.Sprintf("%s:%d", address, port), handlers.CombinedLoggingHandler(os.Stdout, httpRouter))
 		},
