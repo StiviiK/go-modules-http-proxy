@@ -41,18 +41,40 @@ func init() {
 				Usage:       "Port to listen on",
 				Destination: &port,
 			},
+			&cli.StringFlag{
+				Name:    "ssl-cert",
+				Aliases: []string{"cert"},
+				Usage:   "Path to SSL certificate",
+			},
+			&cli.StringFlag{
+				Name:    "ssl-key",
+				Aliases: []string{"key"},
+				Usage:   "Path to SSL key",
+			},
 		},
 		Action: func(c *cli.Context) error {
+			// Load config
 			config := &cmd.Config{}
 			if err := config.Load(configPath); err != nil {
 				return err
 			}
 
+			// Create a new router
 			httpRouter := mux.NewRouter()
 			httpRouter.HandleFunc("/", html.Doge())
 			httpRouter.PathPrefix("/{[a-zA-Z0-9=-/]+}").HandlerFunc(html.All(config))
 
-			return http.ListenAndServe(fmt.Sprintf("%s:%d", address, port), handlers.CombinedLoggingHandler(os.Stdout, httpRouter))
+			// Create a new server
+			address := fmt.Sprintf("%s:%d", address, port)
+			if c.String("ssl-cert") != "" && c.String("ssl-key") != "" {
+				server := &http.Server{
+					Addr:    address,
+					Handler: handlers.LoggingHandler(os.Stdout, httpRouter),
+				}
+				return server.ListenAndServeTLS(c.String("ssl-cert"), c.String("ssl-key"))
+			}
+
+			return http.ListenAndServe(address, handlers.CombinedLoggingHandler(os.Stdout, httpRouter))
 		},
 	}
 
