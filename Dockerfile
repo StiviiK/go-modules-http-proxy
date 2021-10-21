@@ -16,7 +16,7 @@ ADD . .
 # Build the binary.
 RUN GOOS=linux GOARCH=amd64 \
     go build \
-    -ldflags="-X main.version=${VERSION} -X main.Version=$(go version | cut -d " " -f 3) -X main.BuildTime=$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+    -ldflags="-X main.Version=$(go version | cut -d " " -f 3) -X main.BuildTime=$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
     -a -o \
     /usr/local/bin/go-modules-http-proxy
 
