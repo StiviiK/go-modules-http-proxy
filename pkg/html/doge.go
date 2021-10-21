@@ -22,12 +22,12 @@ const doge_ascii = `
     ▀▄▒▒▒▒▒▒▒▒▒▒▄▄▄▀▒▒▒▒▄▀   
       ▀▄▄▄▄▄▄▀▀▀▒▒▒▒▒▄▄▀     
          ▀▀▀▀▀▀▀▀▀▀▀▀        
-       wow such teapot?!
+        wow such empty
 `
 
 func Doge() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusTeapot)
+		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(doge_ascii))
 	}
 }
