@@ -1,4 +1,4 @@
-name: Operator Integration (ARM64)
+name: ARM64
 
 on:
   schedule:

@@ -1,4 +1,4 @@
-name: Operator Integration (AMD64)
+name: AMD64
 
 on:
   schedule:
