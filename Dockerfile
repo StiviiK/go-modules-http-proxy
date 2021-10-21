@@ -14,14 +14,13 @@ RUN go mod verify
 ADD . .
 
 # Build the binary.
-RUN CGO_ENABLED=0 \
-    go build \
+RUN go build \
     -ldflags="-X main.Version=$(go version | cut -d " " -f 3) -X main.BuildTime=$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
     -a -o \
     /usr/local/bin/go-modules-http-proxy
 
 # Runner
-FROM gcr.io/distroless/static:nonroot
+FROM gcr.io/distroless/base:nonroot
 
 # Copy our static executable.
 COPY --from=builder /usr/local/bin/go-modules-http-proxy /usr/local/bin/modulesproxy
