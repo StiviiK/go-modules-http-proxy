@@ -65,16 +65,17 @@ func init() {
 			httpRouter.PathPrefix("/{[a-zA-Z0-9=-/]+}").HandlerFunc(html.All(config))
 
 			// Create a new server
-			address := fmt.Sprintf("%s:%d", address, port)
-			if c.String("ssl-cert") != "" && c.String("ssl-key") != "" {
-				server := &http.Server{
-					Addr:    address,
-					Handler: handlers.LoggingHandler(os.Stdout, httpRouter),
-				}
-				return server.ListenAndServeTLS(c.String("ssl-cert"), c.String("ssl-key"))
+			server := &http.Server{
+				Addr:    fmt.Sprintf("%s:%d", address, port),
+				Handler: handlers.LoggingHandler(os.Stdout, httpRouter),
 			}
 
-			return http.ListenAndServe(address, handlers.CombinedLoggingHandler(os.Stdout, httpRouter))
+			// Start the server
+			if c.String("ssl-cert") != "" && c.String("ssl-key") != "" {
+				return server.ListenAndServeTLS(c.String("ssl-cert"), c.String("ssl-key"))
+			} else {
+				return server.ListenAndServe()
+			}
 		},
 	}
 
