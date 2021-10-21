@@ -12,6 +12,7 @@ type GitTemplateData struct {
 	GitInstance string
 	BasePackage string
 	FullPackage string
+	Branch      string
 }
 
 var (
@@ -25,6 +26,7 @@ func Git(gitinstance string) func(w http.ResponseWriter, r *http.Request) {
 			GitInstance: gitinstance,
 			BasePackage: strings.Split(r.URL.Path, "/")[1],
 			FullPackage: r.URL.Path[1:],
+			Branch:      "main",
 		}
 
 		var buf bytes.Buffer

@@ -12,4 +12,5 @@ require (
 	github.com/cpuguy83/go-md2man/v2 v2.0.1 // indirect
 	github.com/felixge/httpsnoop v1.0.2 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
+	go3.stivik.me/modulesproxy-test v0.0.0-20211021140855-fab8de467ca9 // indirect
 )
