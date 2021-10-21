@@ -13,14 +13,21 @@ import (
 )
 
 var (
-	address string
-	port    int
+	configPath string
+	address    string
+	port       int
 )
 
 func init() {
 	command := &cli.Command{
 		Name: "serve",
 		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:        "config",
+				Value:       "config.yaml",
+				Usage:       "config file",
+				Destination: &configPath,
+			},
 			&cli.StringFlag{
 				Name:        "address",
 				Value:       "0.0.0.0",
@@ -36,9 +43,14 @@ func init() {
 			},
 		},
 		Action: func(c *cli.Context) error {
+			config := &cmd.Config{}
+			if err := config.Load(configPath); err != nil {
+				return err
+			}
+
 			httpRouter := mux.NewRouter()
 			httpRouter.HandleFunc("/", html.Doge())
-			httpRouter.PathPrefix("/{[a-zA-Z0-9=-/]+}").HandlerFunc(html.Git("https://github.com/StiviiK", "main"))
+			httpRouter.PathPrefix("/{[a-zA-Z0-9=-/]+}").HandlerFunc(html.All(config))
 
 			return http.ListenAndServe(fmt.Sprintf("%s:%d", address, port), handlers.CombinedLoggingHandler(os.Stdout, httpRouter))
 		},

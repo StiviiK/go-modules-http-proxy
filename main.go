@@ -29,15 +29,15 @@ var BuildTime = "N/A"
 var assets embed.FS
 
 func init() {
+	defer panicHandler()
+
 	config.Set("Go Modules HTTP Proxy", Version, BuildTime)
 
 	// Parse the HTML assets
-	html.ParseTemplates(assets)
+	html.ParseTemplate(assets)
 }
 
 func main() {
-	defer panicHandler()
-
 	app := cli.NewApp()
 	app.Name = "Go Modules HTTP Proxy"
 	app.Commands = *cmd.Retrieve()
@@ -47,15 +47,9 @@ func main() {
 	app.ErrWriter = os.Stderr
 
 	if err := app.Run(os.Args); err != nil {
-		/*
-			if os.Getenv("DEBUG") == "1" {
-				fmt.Fprintf(os.Stderr, "%+v\n\n%s", err, err.Error())
-			} else {
-				fmt.Fprintln(os.Stderr, err.Error())
-				fmt.Fprintln(os.Stderr, "Re-run with DEBUG=1 for more info.")
-			}
-		*/
-		panic(err)
+		fmt.Fprintf(os.Stderr, "%s\n", config.Version())
+		fmt.Fprintf(os.Stderr, "Release Date: %s\n\n", config.ReleaseDate())
+		fmt.Fprintf(os.Stderr, "%+v", err)
 	}
 }
 
@@ -66,6 +60,8 @@ func panicHandler() {
 			fmt.Fprintf(os.Stderr, "Release Date: %s\n\n", config.ReleaseDate())
 			panic(r)
 		} else {
+			fmt.Fprintf(os.Stderr, "%s\n", config.Version())
+			fmt.Fprintf(os.Stderr, "Release Date: %s\n\n", config.ReleaseDate())
 			fmt.Fprintln(os.Stderr, "Something unexpected happened.")
 			fmt.Fprintln(os.Stderr, "If you want to help us debug the problem, please run:")
 			fmt.Fprintf(os.Stderr, "DEBUG=1 %s\n", strings.Join(os.Args, " "))

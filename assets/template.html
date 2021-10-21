@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="go-import" content="{{.Package}} {{.Type}} {{.Target}}">
+        {{if .Sources}}<meta name="go-source" content="{{.Sources.String}}">{{end}}
+        <meta http-equiv="refresh" content="0; url={{.Redirect}}">
+    </head>
+    <body>
+        Nothing to see here. Please <a href="{{.Redirect}}">move along</a>.
+    </body>
+</html>

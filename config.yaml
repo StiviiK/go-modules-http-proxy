@@ -1,0 +1,9 @@
+modules:
+  - package: go.stivik.me/atomic
+    type: git
+    target: https://github.com/StiviiK/atomic.git
+    sources:
+      - https://github.com/StiviiK/atomic
+      - https://github.com/StiviiK/atomic/tree/main{/dir}
+      - https://github.com/StiviiK/atomic/tree/main{/dir}/{file}#L{line}
+#    redirect: https://google.com
