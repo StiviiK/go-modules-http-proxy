@@ -4,11 +4,10 @@ import (
 	"bytes"
 	"embed"
 	"fmt"
+	"github.com/StiviiK/go-modules-http-proxy/cmd/serve/config"
 	"html/template"
 	"net/http"
 	"strings"
-
-	"github.com/StiviiK/go-modules-http-proxy/cmd"
 )
 
 const defaultRedirect = "https://pkg.go.dev%s"
@@ -19,36 +18,39 @@ func ParseTemplate(fs embed.FS) {
 	htmlTemplate = template.Must(template.ParseFS(fs, "assets/template.html"))
 }
 
-func All(config *cmd.Config) func(w http.ResponseWriter, r *http.Request) {
+func All(config *config.Config) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// try to get module from url
-		module := get_module(config, fmt.Sprintf("%s/%s", r.Host, strings.Split(r.URL.Path, "/")[1]))
+		module := getModule(config, fmt.Sprintf("%s/%s", r.Host, strings.Split(r.URL.Path, "/")[1]))
 		if module == nil {
 			http.Error(w, "404 page not found", http.StatusNotFound)
 			return
 		}
 
 		// explicitly copy module to avoid further changes
-		module_copy := *module
+		moduleCopy := *module
 
 		// Check if a redirect is set
-		if module_copy.Redirect == "" {
-			module_copy.Redirect = fmt.Sprintf(defaultRedirect, r.URL.Path)
+		if moduleCopy.Redirect == "" {
+			moduleCopy.Redirect = fmt.Sprintf(defaultRedirect, r.URL.Path)
 		}
 
 		// Render the template
 		var buf bytes.Buffer
-		if err := htmlTemplate.Execute(&buf, module_copy); err != nil {
+		if err := htmlTemplate.Execute(&buf, moduleCopy); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
 		// Only write the response on success
-		w.Write(buf.Bytes())
+		if _, err := w.Write(buf.Bytes()); err != nil {
+			// Todo: Log error or else
+			return
+		}
 	}
 }
 
-func get_module(config *cmd.Config, name string) *cmd.Module {
+func getModule(config *config.Config, name string) *config.Module {
 	for _, _module := range config.Modules {
 		if _module.Package == name {
 			return _module

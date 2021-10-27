@@ -2,6 +2,7 @@ package serve
 
 import (
 	"fmt"
+	config "github.com/StiviiK/go-modules-http-proxy/cmd/serve/config"
 	"net/http"
 	"os"
 
@@ -53,16 +54,16 @@ func init() {
 			},
 		},
 		Action: func(c *cli.Context) error {
-			// Load config
-			config := &cmd.Config{}
-			if err := config.Load(configPath); err != nil {
+			// Load conf
+			conf := &config.Config{}
+			if err := conf.Load(configPath); err != nil {
 				return err
 			}
 
 			// Create a new router
 			httpRouter := mux.NewRouter()
 			httpRouter.HandleFunc("/", html.Doge())
-			httpRouter.PathPrefix("/{[a-zA-Z0-9=-/]+}").HandlerFunc(html.All(config))
+			httpRouter.PathPrefix("/{[a-zA-Z0-9=-/]+}").HandlerFunc(html.All(conf))
 
 			// Create a new server
 			server := &http.Server{
