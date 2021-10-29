@@ -27,4 +27,6 @@ COPY --from=builder /usr/local/bin/go-modules-http-proxy /usr/local/bin/modulesp
 
 VOLUME [ "/config" ]
 EXPOSE 8080
-CMD ["/usr/local/bin/modulesproxy", "serve", "--address=0.0.0.0", "--port=8080", "--config=/config/config.yaml"]
+
+ENTRYPOINT ["/usr/local/bin/modulesproxy"]
+CMD ["serve", "--address=0.0.0.0", "--port=8080", "--config=/config/config.yaml"]
